@@ -23,6 +23,10 @@ A retro-cyberpunk real-time system monitoring web application inspired by termin
 
 ---
 
+## 🌐 Live Demo
+
+🔗 **https://system-monitor-seven.vercel.app/**
+
 ## 🚀 Quick Start
 
 ### 1. Prerequisites
