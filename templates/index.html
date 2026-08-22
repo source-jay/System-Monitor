@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>System Monitor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="crt-overlay"></div>
+  <div class="scanline"></div>
+
+  <header>
+    <div class="header-top">
+      <span class="header-title">SYSTEM_OS v2.4.0</span>
+      <div class="header-avatar">
+        <span class="material-symbols-outlined" style="font-size: 18px;">person</span>
+      </div>
+    </div>
+    <div class="header-bottom">
+      <span class="uptime" id="uptime-display">UPTIME: 00:00:00:00</span>
+      <span class="page-title" id="page-title">Status</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- STATUS TAB -->
+    <div id="tab-status" class="tab-content active">
+      <div class="block highlight" style="margin-top: 4px;">
+        <div class="block-label primary"><span>+</span> SYS_HEALTH <span>+</span></div>
+        <div style="display: flex; gap: 24px; padding-top: 4px; align-items: center;">
+          <pre class="status-logo">  __  __
+ /  \/  \
+ \      /
+  \    /
+   \  /
+    \/  </pre>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 20px; font-weight: 600;">CORE_NODE_01</span>
+            <div class="badge">[ STABLE ]</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- CPU Load -->
+        <div class="metric-card">
+          <div class="block-label">CPU_LD</div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
+            <div class="metric-val text-primary" id="status-cpu-val">00%</div>
+            <div class="text-muted" style="font-size: 12px;" id="status-cpu-cores">0 CORES</div>
+          </div>
+          <div class="bar-bg" id="status-cpu-bar">░░░░░░░░░░░░</div>
+        </div>
+        <!-- RAM Usage -->
+        <div class="metric-card">
+          <div class="block-label">MEM_USE</div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
+            <div class="metric-val text-secondary" id="status-mem-val">00%</div>
+            <div class="text-muted" style="font-size: 12px;" id="status-mem-text">0.0/0.0GB</div>
+          </div>
+          <div class="bar-bg" id="status-mem-bar">░░░░░░░░░░░░</div>
+        </div>
+        <!-- DISK I/O -->
+        <div class="metric-card">
+          <div class="block-label">DSK_IO</div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
+            <div class="metric-val" id="status-disk-val">00%</div>
+            <div class="text-muted" style="font-size: 12px;">/ROOT</div>
+          </div>
+          <div class="bar-bg" id="status-disk-bar">░░░░░░░░░░░░</div>
+        </div>
+        <!-- TEMP -->
+        <div class="metric-card" id="status-temp-card">
+          <div class="block-label error">THERMAL</div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4px;">
+            <div class="metric-val text-error" id="status-temp-val">--°C</div>
+            <div class="text-error" style="font-size: 12px; opacity: 0.7;">WARN</div>
+          </div>
+          <div class="bar-bg" style="color: rgba(255, 180, 171, 0.3)" id="status-temp-bar">░░░░░░░░░░░░</div>
+        </div>
+      </div>
+
+      <div class="block" style="margin-top: 4px;">
+        <div class="block-label" style="display: flex; gap: 4px; align-items: center;">
+          <span style="width: 6px; height: 6px; background-color: var(--error); animation: pulse 2s infinite;"></span>
+          SYSLOG
+        </div>
+        <ul class="log-list">
+          <li><span class="text-muted">[14:22:01]</span><span class="text-error">Auth failure on port 22 from 192.168.1.45</span></li>
+          <li><span class="text-muted">[14:15:30]</span><span class="text-primary">Backup complete (2.1GB) -> /mnt/archive</span></li>
+          <li><span class="text-muted">[12:01:45]</span><span class="text-secondary">CRON execution successful (sys_cleanup)</span></li>
+          <li><span class="text-muted">[11:42:10]</span><span>Kernel parameter sync completed</span></li>
+        </ul>
+      </div>
+
+      <div class="prompt">
+        <span class="text-primary">&gt;</span>
+        <span class="text-muted">_</span>
+        <span class="cursor-blink" style="width: 8px; height: 14px; background: var(--primary-fixed);"></span>
+      </div>
+    </div>
+
+    <!-- RESOURCES TAB -->
+    <div id="tab-resources" class="tab-content">
+      <div class="block" style="background: var(--surface-container-low);">
+        <div class="block-label primary" style="border: 1px solid var(--outline-variant); background: var(--surface-container-low);">[CPU_METRICS]</div>
+        <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 8px; font-size: 12px;">
+          <div style="display: flex; justify-content: space-between; color: var(--secondary-fixed); margin-bottom: 8px;">
+            <span id="res-cpu-load">LOAD: --%</span>
+            <span id="res-cpu-temp">TEMP: --°C</span>
+            <span id="res-cpu-freq">FREQ: --GHz</span>
+          </div>
+          <div class="ascii-chart">
+100% |                                      
+ 80% |                                      
+ 60% |          .x.           x.            
+ 40% |      .x.x...x.       .x..x.          
+ 20% |  .x.x.........x.   .x......x.   .x.  
+  0% | x...............x.x..........x.x...x 
+     +--------------------------------------
+      -60s      -45s      -30s      -15s   NOW</div>
+          <div class="text-muted" style="display: flex; gap: 16px; margin-top: 8px;" id="res-cpu-cores-1">
+            <!-- Populated via JS -->
+          </div>
+          <div class="text-muted" style="display: flex; gap: 16px;" id="res-cpu-cores-2">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="block" style="background: var(--surface-container-low); margin-top: 8px; border-color: #ff70f3;">
+        <div class="block-label" style="border: 1px solid #ff70f3; color: #ff70f3; background: var(--surface-container-low);">[MEM_ALLOCATION]</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 8px; font-size: 12px; color: #ff70f3;">
+          <div style="display: flex; justify-content: space-between; color: var(--on-surface);">
+            <span id="res-mem-total">TOTAL: --GB</span>
+            <span id="res-mem-used">USED: --GB</span>
+            <span id="res-mem-free">FREE: --GB</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span class="text-muted">PHYSICAL_RAM</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="background-color: #ff70f3;" id="res-mem-bar"></div>
+              </div>
+              <span style="width: 40px; text-align: right;" id="res-mem-pct">--%</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+            <span class="text-muted">SWAP_SPACE</span>
+            <div style="display: flex; align-items: center; gap: 8px; color: var(--on-surface-variant);">
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="background-color: var(--outline); opacity: 0.4;" id="res-swap-bar"></div>
+              </div>
+              <span style="width: 40px; text-align: right;" id="res-swap-pct">--%</span>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 10px; color: rgba(185, 204, 178, 0.7); border-top: 1px solid rgba(59, 75, 55, 0.3); padding-top: 8px; margin-top: 8px;">
+            <span id="res-mem-cache">CACHE: --GB</span>
+            <span id="res-mem-buffers">BUFFERS: --GB</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="block" style="background: var(--surface-container-low); margin-top: 8px;">
+        <div class="block-label primary" style="border: 1px solid var(--outline-variant); background: var(--surface-container-low);">[STORAGE_VOLUMES]</div>
+        <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px; font-size: 12px;" id="res-disk-list">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESSES TAB -->
+    <div id="tab-processes" class="tab-content">
+      <div class="block" style="background: var(--surface-container-low); overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div style="background: var(--outline-variant); color: var(--on-surface); padding: 2px 4px; font-size: 12px; font-weight: 700; border: 1px solid var(--outline);">[HTOP_SYS_MONITOR]</div>
+          <span style="font-size: 12px; color: var(--secondary-fixed);" id="proc-cpu-cores">CPU: -- cores</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 2px; font-size: 12px;" id="proc-bars">
+           <!-- Populated via JS -->
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--outline-variant); font-size: 12px;">
+          <div class="text-muted">Tasks: <span id="proc-tasks" style="color: var(--on-surface);">--</span>, <span class="text-primary">1</span> thr</div>
+          <div class="text-muted">Load avg: <span id="proc-load" style="color: var(--on-surface);">--</span></div>
+        </div>
+      </div>
+      
+      <div style="border: 1px solid var(--outline-variant); background: var(--surface-dim); padding: 8px; display: flex; align-items: center; box-shadow: inset 0 0 12px rgba(0,0,0,0.5);">
+        <span class="material-symbols-outlined text-primary" style="font-size: 18px; margin-right: 4px;">search</span>
+        <span class="text-primary" style="font-size: 12px; margin-right: 4px;">&gt; filter_proc:</span>
+        <span class="cursor-blink" style="width: 8px; height: 14px; background: var(--primary-fixed);"></span>
+      </div>
+
+      <div class="table">
+        <div class="table-header">
+          <div style="opacity: 0.7;">PID</div>
+          <div style="opacity: 0.7;">USER</div>
+          <div style="opacity: 0.7; text-align: right;">CPU%</div>
+          <div style="opacity: 0.7; text-align: right;">MEM%</div>
+          <div style="opacity: 0.7; padding-left: 4px;">COMMAND</div>
+        </div>
+        <div id="process-list" style="display: flex; flex-direction: column;">
+           <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <button class="btn primary"><span>[F9]</span><span>KILL</span></button>
+        <button class="btn primary"><span>[F7]</span><span>RENICE</span></button>
+        <button class="btn"><span>[F4]</span><span>FILTER</span></button>
+        <button class="btn"><span>[F10]</span><span>QUIT</span></button>
+      </div>
+    </div>
+
+    <!-- NETWORK TAB -->
+    <div id="tab-network" class="tab-content">
+      <div class="block highlight">
+        <div class="block-label primary"><span>+</span> NET_TRAFFIC <span>+</span></div>
+        <div style="padding-top: 8px;" id="network-interfaces">
+           <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--primary-fixed);">
+      <span style="opacity: 0.7;">root@monitor:~#</span>
+      <span class="cursor-blink" style="width: 8px; height: 16px; background: var(--primary-fixed);"></span>
+    </div>
+    <div class="nav-links">
+      <a href="#" class="nav-link active" data-tab="status">[STATUS]</a>
+      <a href="#" class="nav-link" data-tab="resources">[RESOURCES]</a>
+      <a href="#" class="nav-link" data-tab="processes">[PROCESSES]</a>
+      <a href="#" class="nav-link" data-tab="network">[NETWORK]</a>
+    </div>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
