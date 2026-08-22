@@ -76,3 +76,21 @@ system monitor/
 └── templates/
     └── index.html      # Single Page Application HTML markup
 ```
+
+## 👨‍💻 Developer
+
+**Jay Nimase**
+
+B.Tech Software Engineering Student
+MIT Academy of Engineering, Pune
+
+* GitHub: https://github.com/source-jay
+* LinkedIn: https://www.linkedin.com/in/jay-nimase/
+
+## 📄 License
+
+This project is developed for educational and portfolio purposes.
+
+---
+
+⭐ If you found this project interesting, consider giving the repository a star!
