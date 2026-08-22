@@ -4,6 +4,10 @@ A retro-cyberpunk real-time system monitoring web application inspired by termin
 
 ---
 
+## 🌐 Live Demo
+
+🔗 **https://system-monitor-seven.vercel.app/**
+
 ## 💻 Tech Stack
 
 - **Backend**: Python 3.x, Flask, `psutil`, `os`, `time`
@@ -22,10 +26,6 @@ A retro-cyberpunk real-time system monitoring web application inspired by termin
 - 📱 **Mobile & Desktop Ready**: Fully responsive interface tailored for smartphones and desktop browsers alike.
 
 ---
-
-## 🌐 Live Demo
-
-🔗 **https://system-monitor-seven.vercel.app/**
 
 ## 🚀 Quick Start
 
